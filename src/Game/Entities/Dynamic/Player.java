@@ -21,6 +21,9 @@ public class Player {
     public int moveCounter;
 
     public String direction;//is your first name one?
+    private Color playerColor;
+    private int speedAdjust;
+    private Tail tail;
 
     public Player(Handler handler){
         this.handler = handler;
@@ -30,24 +33,35 @@ public class Player {
         direction= "Right";
         justAte = false;
         lenght= 1;
+        playerColor = Color.green;
+        speedAdjust = 4;
 
     }
 
     public void tick(){
         moveCounter++;
-        if(moveCounter>=5) {
+        if(moveCounter>=speedAdjust) {
             checkCollisionAndMove();
             moveCounter=0;
         }
-        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP)){
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_W)){
             direction="Up";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN)){
+        }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_S)){
             direction="Down";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT)){
+        }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_A)){
             direction="Left";
-        }if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT)){
+        }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_D)){
             direction="Right";
         }
+        if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)){
+			speedAdjust-=2;
+		}
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS)){
+			speedAdjust+=2;
+		}
 
     }
 
@@ -104,7 +118,7 @@ public class Player {
         Random r = new Random();
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-                g.setColor(Color.WHITE);
+                g.setColor(playerColor);
 
                 if(playeLocation[i][j]||handler.getWorld().appleLocation[i][j]){
                     g.fillRect((i*handler.getWorld().GridPixelsize),
@@ -237,6 +251,8 @@ public class Player {
             }
         }
     }
+    
+    
 
     public boolean isJustAte() {
         return justAte;
