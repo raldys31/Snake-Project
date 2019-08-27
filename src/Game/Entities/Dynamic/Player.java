@@ -20,7 +20,7 @@ public class Player {
 
     public int moveCounter;
 
-    public String direction;//is your first name one?
+    public String direction;
     private Color playerColor;
     private int speedAdjust;
     private Tail tail;
@@ -62,6 +62,10 @@ public class Player {
 		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_MINUS)){
 			speedAdjust+=2;
 		}
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_N)) {
+			this.setJustAte(false);
+			EatAndAddTail(); 
+		}
 
     }
 
@@ -99,11 +103,12 @@ public class Player {
                 }
                 break;
         }
+        
         handler.getWorld().playerLocation[xCoord][yCoord]=true;
-
-
+        
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
-            Eat();
+			this.setJustAte(true);
+			EatAndAddTail();
         }
 
         if(!handler.getWorld().body.isEmpty()) {
@@ -133,112 +138,139 @@ public class Player {
 
     }
 
-    public void Eat(){
-        lenght++;
-        Tail tail= null;
-        handler.getWorld().appleLocation[xCoord][yCoord]=false;
-        handler.getWorld().appleOnBoard=false;
-        switch (direction){
-            case "Left":
-                if( handler.getWorld().body.isEmpty()){
-                    if(this.xCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
-                        tail = new Tail(this.xCoord+1,this.yCoord,handler);
-                    }else{
-                        if(this.yCoord!=0){
-                            tail = new Tail(this.xCoord,this.yCoord-1,handler);
-                        }else{
-                            tail =new Tail(this.xCoord,this.yCoord+1,handler);
-                        }
-                    }
-                }else{
-                    if(handler.getWorld().body.getLast().x!=handler.getWorld().GridWidthHeightPixelCount-1){
-                        tail=new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler);
-                    }else{
-                        if(handler.getWorld().body.getLast().y!=0){
-                            tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler);
-                        }else{
-                            tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler);
+    public void EatAndAddTail(){
+    	lenght++;
+    	if(justAte==true){
 
-                        }
-                    }
+    		handler.getWorld().appleLocation[xCoord][yCoord]=false;
+    		handler.getWorld().appleOnBoard=false;
 
-                }
-                break;
-            case "Right":
-                if( handler.getWorld().body.isEmpty()){
-                    if(this.xCoord!=0){
-                        tail=new Tail(this.xCoord-1,this.yCoord,handler);
-                    }else{
-                        if(this.yCoord!=0){
-                            tail=new Tail(this.xCoord,this.yCoord-1,handler);
-                        }else{
-                            tail=new Tail(this.xCoord,this.yCoord+1,handler);
-                        }
-                    }
-                }else{
-                    if(handler.getWorld().body.getLast().x!=0){
-                        tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
-                    }else{
-                        if(handler.getWorld().body.getLast().y!=0){
-                            tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
-                        }else{
-                            tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
-                        }
-                    }
-
-                }
-                break;
-            case "Up":
-                if( handler.getWorld().body.isEmpty()){
-                    if(this.yCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
-                        tail=(new Tail(this.xCoord,this.yCoord+1,handler));
-                    }else{
-                        if(this.xCoord!=0){
-                            tail=(new Tail(this.xCoord-1,this.yCoord,handler));
-                        }else{
-                            tail=(new Tail(this.xCoord+1,this.yCoord,handler));
-                        }
-                    }
-                }else{
-                    if(handler.getWorld().body.getLast().y!=handler.getWorld().GridWidthHeightPixelCount-1){
-                        tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
-                    }else{
-                        if(handler.getWorld().body.getLast().x!=0){
-                            tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
-                        }else{
-                            tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
-                        }
-                    }
-
-                }
-                break;
-            case "Down":
-                if( handler.getWorld().body.isEmpty()){
-                    if(this.yCoord!=0){
-                        tail=(new Tail(this.xCoord,this.yCoord-1,handler));
-                    }else{
-                        if(this.xCoord!=0){
-                            tail=(new Tail(this.xCoord-1,this.yCoord,handler));
-                        }else{
-                            tail=(new Tail(this.xCoord+1,this.yCoord,handler));
-                        } System.out.println("Tu biscochito");
-                    }
-                }else{
-                    if(handler.getWorld().body.getLast().y!=0){
-                        tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
-                    }else{
-                        if(handler.getWorld().body.getLast().x!=0){
-                            tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
-                        }else{
-                            tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
-                        }
-                    }
-
-                }
-                break;
-        }
-        handler.getWorld().body.addLast(tail);
-        handler.getWorld().playerLocation[tail.x][tail.y] = true;
+    		switch (direction){
+    		case "Left":
+    			if(handler.getWorld().body.isEmpty()){
+    				if(this.xCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
+    					tail = new Tail(this.xCoord+1,this.yCoord,handler);
+    				}
+    				else {
+    					if(this.yCoord!=0){
+    						tail = new Tail(this.xCoord,this.yCoord-1,handler);
+    					}
+    					else{
+    						tail =new Tail(this.xCoord,this.yCoord+1,handler);
+    					}
+    				}
+    			}
+    			else{
+    				if(handler.getWorld().body.getLast().x!=handler.getWorld().GridWidthHeightPixelCount-1){
+    					tail=new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler);
+    				}
+    				else {
+    					if(handler.getWorld().body.getLast().y!=0){
+    						tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler);
+    					}
+    					else {
+    						tail=new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler);
+    					}
+    				}
+    			}
+    			break;
+    			
+    		case "Right":
+    			if(handler.getWorld().body.isEmpty()){
+    				if(this.xCoord!=0){
+    					tail=new Tail(this.xCoord-1,this.yCoord,handler);
+    				}
+    				else {
+    					if(this.yCoord!=0){
+    						tail=new Tail(this.xCoord,this.yCoord-1,handler);
+    					}
+    					else {
+    						tail=new Tail(this.xCoord,this.yCoord+1,handler);
+    					}
+    				}
+    			}
+    			else {
+    				if(handler.getWorld().body.getLast().x!=0){
+    					tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+    				}
+    				else {
+    					if(handler.getWorld().body.getLast().y!=0){
+    						tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
+    					}
+    					else
+    					{
+    						tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
+    					}
+    				}
+    			}
+    			break;
+    			
+    		case "Up":
+    			if(handler.getWorld().body.isEmpty()){
+    				if(this.yCoord!=handler.getWorld().GridWidthHeightPixelCount-1){
+    					tail=(new Tail(this.xCoord,this.yCoord+1,handler));
+    				}
+    				else {
+    					if(this.xCoord!=0){
+    						tail=(new Tail(this.xCoord-1,this.yCoord,handler));
+    					}
+    					else
+    					{
+    						tail=(new Tail(this.xCoord+1,this.yCoord,handler));
+    					}
+    				}
+    			} 
+    			else {
+    				if (handler.getWorld().body.getLast().y!=handler.getWorld().GridWidthHeightPixelCount-1){
+    					tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord+1,handler));
+    				} 
+    				else {
+    					if(handler.getWorld().body.getLast().x!=0){
+    						tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+    					}
+    					else{
+    						tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
+    					}
+    				}
+    			}
+    			break;
+    			
+    		case "Down":
+    			if(handler.getWorld().body.isEmpty()){
+    				if(this.yCoord!=0){
+    					tail=(new Tail(this.xCoord,this.yCoord-1,handler));
+    				}
+    				else{
+    					if(this.xCoord!=0){
+    						tail=(new Tail(this.xCoord-1,this.yCoord,handler));
+    					}
+    					else{
+    						tail=(new Tail(this.xCoord+1,this.yCoord,handler));
+    					}
+    				}
+    			}
+    			else {
+    				if(handler.getWorld().body.getLast().y!=0){
+    					tail=(new Tail(handler.getWorld().body.getLast().x,this.yCoord-1,handler));
+    				}
+    				else{
+    					if(handler.getWorld().body.getLast().x!=0){
+    						tail=(new Tail(handler.getWorld().body.getLast().x-1,this.yCoord,handler));
+    					}
+    					else{
+    						tail=(new Tail(handler.getWorld().body.getLast().x+1,this.yCoord,handler));
+    					}
+    				}
+    			}
+    			break;
+    		}
+    		
+    		handler.getWorld().body.addLast(tail);
+    		handler.getWorld().playerLocation[tail.x][tail.y] = true;
+    	}
+    	else{
+    		handler.getWorld().body.addLast(new Tail(xCoord, yCoord, handler));
+    	}
     }
 
     public void kill(){
