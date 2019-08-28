@@ -60,7 +60,7 @@ public class DisplayScreen {
         frame.add(message, BorderLayout.SOUTH);
 
         try {
-            frame.setIconImage(ImageIO.read(new File("res/Sheets/icon.png")));
+            frame.setIconImage(ImageIO.read(new File("res/Sheets/pixelsnake.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import Display.DisplayScreen;
+import Game.GameStates.State;
 
 /**
  * Created by AlexVR on 7/2/2018.
@@ -120,6 +121,15 @@ public class Player {
         }
         
         handler.getWorld().playerLocation[xCoord][yCoord]=true;
+        
+        if (handler.getWorld().body.size() > 0) {
+			for (int i = 0; i < handler.getWorld().body.size(); i++){
+				//Kill player when collides with itself
+				if(xCoord == handler.getWorld().body.get(i).x && yCoord == handler.getWorld().body.get(i).y) {
+					kill();
+				} 
+			}
+		}
         
         if(handler.getWorld().appleLocation[xCoord][yCoord]){
 			this.setJustAte(true);
@@ -303,6 +313,8 @@ public class Player {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
+                State.setState(handler.getGame().gameOverState); 
+              
 
             }
         }
