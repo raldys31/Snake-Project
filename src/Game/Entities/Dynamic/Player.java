@@ -1,10 +1,21 @@
 package Game.Entities.Dynamic;
 
 import Main.Handler;
+import Resources.Images;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
+
+import javax.swing.JOptionPane;
+
+import Display.DisplayScreen;
 
 /**
  * Created by AlexVR on 7/2/2018.
@@ -17,10 +28,12 @@ public class Player {
 
     public int xCoord;
     public int yCoord;
+    public int score;
 
     public int moveCounter;
 
     public String direction;
+    private String highscore;
     private Color playerColor;
     private int speedAdjust;
     private Tail tail;
@@ -29,17 +42,19 @@ public class Player {
         this.handler = handler;
         xCoord = 0;
         yCoord = 0;
+        score = 0;
+        highscore = this.getHighScore();
         moveCounter = 0;
         direction= "Right";
         justAte = false;
         lenght= 1;
         playerColor = Color.green;
-        speedAdjust = 4;
+        speedAdjust = 20;
 
     }
 
     public void tick(){
-        moveCounter++;
+        moveCounter += 2;
         if(moveCounter>=speedAdjust) {
             checkCollisionAndMove();
             moveCounter=0;
@@ -110,6 +125,11 @@ public class Player {
 			this.setJustAte(true);
 			EatAndAddTail();
         }
+        
+        //Displays the score on the bottom as soon as the game starts and gets updated whenever the snake eats a dot
+        if((xCoord > 0 || yCoord > 0) || justAte==true){
+			DisplayScreen.setMessage(String.format("Current Score: %d; %s", score, highscore)); 
+        }
 
         if(!handler.getWorld().body.isEmpty()) {
             handler.getWorld().playerLocation[handler.getWorld().body.getLast().x][handler.getWorld().body.getLast().y] = false;
@@ -141,6 +161,10 @@ public class Player {
     public void EatAndAddTail(){
     	lenght++;
     	if(justAte==true){
+    		//Score formula
+    		score += Math.sqrt(2*score + 1);
+    		//Increases the speed of the snake everytime it eats a dot.
+    		speedAdjust -= 5;
 
     		handler.getWorld().appleLocation[xCoord][yCoord]=false;
     		handler.getWorld().appleOnBoard=false;
@@ -283,6 +307,55 @@ public class Player {
             }
         }
     }
+    
+    public String getHighScore(){
+		BufferedReader reader = null;
+		try{
+			reader = new BufferedReader(new FileReader("highscore.dat"));
+			return reader.readLine();
+		}catch(Exception e){
+			return "High score: 0 (by nobody)";
+		}
+		finally{
+			try {
+				if(reader != null){
+					reader.close();
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void checkScore(){
+		if(score > Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))){
+			String name = (String) JOptionPane.showInputDialog(null, "You set a new high score.\nPlease enter your name: ", "Congratulations!", JOptionPane.INFORMATION_MESSAGE, Images.icon, null, "");
+			if(name == null){
+				name = "somebody";
+			}
+			highscore = String.format("High Score: %d (by %s)", score, name); 
+
+			File scoreFile = new File("highscore.dat");
+			BufferedWriter writer;
+			if(!scoreFile.exists()){
+				try {
+					scoreFile.createNewFile();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}			
+			}
+			try {
+				writer = new BufferedWriter(new FileWriter(scoreFile));
+				writer.write(highscore);
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
     
     
 
