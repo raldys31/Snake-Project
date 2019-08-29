@@ -37,6 +37,7 @@ public class Player {
 	private String highscore;
 	private Color playerColor;
 	private Color appleColor;
+	private Color rottenAppleColor;
 	private int speedAdjust;
 	private Tail tail;
 	private String eatSoundEffect;
@@ -55,6 +56,7 @@ public class Player {
 		lenght= 1;
 		playerColor = Color.green;
 		appleColor = Color.red;
+		rottenAppleColor = Color.black;
 		speedAdjust = 20;
 		eatSoundEffect = "res/music/bite.wav";
 		deathSoundEffect = "res/music/sound-frogger-dead.wav";
@@ -180,13 +182,19 @@ public class Player {
 		//Changes the color of the apple
 		for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
 			for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
-				g.setColor(appleColor);
+				if (handler.getWorld().apple.isGood) {
+					g.setColor(appleColor);
+				}
+				else {
+					g.setColor(rottenAppleColor);
+				}
 
 				if(handler.getWorld().appleLocation[i][j]){
 					g.fillRect((i*handler.getWorld().GridPixelsize),
 							(j*handler.getWorld().GridPixelsize),
 							handler.getWorld().GridPixelsize,
 							handler.getWorld().GridPixelsize);
+
 				}
 			}
 		}
