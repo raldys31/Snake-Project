@@ -38,6 +38,9 @@ public class Player {
     private Color playerColor;
     private int speedAdjust;
     private Tail tail;
+    private String eatSoundEffect;
+    private String deathSoundEffect;
+    private boolean soundLoop;
 
     public Player(Handler handler){
         this.handler = handler;
@@ -51,6 +54,10 @@ public class Player {
         lenght= 1;
         playerColor = Color.green;
         speedAdjust = 20;
+        eatSoundEffect = "res/music/bite.wav";
+        deathSoundEffect = "res/music/sound-frogger-dead.wav";
+        soundLoop = true;
+        
 
     }
 
@@ -83,6 +90,7 @@ public class Player {
 			EatAndAddTail(); 
 		}
 		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)){
+			handler.getGame().playAudio("res/music/pause.wav", false);
 			State.setState(handler.getGame().pauseState);
 		}
 		
@@ -179,6 +187,7 @@ public class Player {
     		//Increases the speed of the snake everytime it eats a dot.
     		speedAdjust -= 5;
 
+    		handler.getGame().playAudio(eatSoundEffect, false);
     		handler.getWorld().appleLocation[xCoord][yCoord]=false;
     		handler.getWorld().appleOnBoard=false;
 
@@ -312,13 +321,14 @@ public class Player {
 
     public void kill(){
         lenght = 0;
+        handler.getGame().stopMainAudio();
+        handler.getGame().playAudio(deathSoundEffect, false);
+        
         for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
             for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 
                 handler.getWorld().playerLocation[i][j]=false;
                 State.setState(handler.getGame().gameOverState); 
-              
-
             }
         }
     }
@@ -345,6 +355,8 @@ public class Player {
 
 	public void checkScore(){
 		if(score > Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))){
+			handler.getGame().stopAudio();
+			handler.getGame().playAudio("res/music/cheering.wav", false);
 			String name = (String) JOptionPane.showInputDialog(null, "You set a new high score.\nPlease enter your name: ", "Congratulations!", JOptionPane.INFORMATION_MESSAGE, Images.icon, null, "");
 			if(name == null){
 				name = "somebody";
@@ -376,6 +388,18 @@ public class Player {
 		if (score < Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))) {
 			System.exit(0);
 		}
+	}
+	
+	public void setEatSoundEffect(String eatSoundEffect) {
+		this.eatSoundEffect = eatSoundEffect;
+	}
+
+	public void setDeathSoundEffect(String deathSoundEffect) {
+		this.deathSoundEffect = deathSoundEffect;
+	}
+	
+	public void setAudioLoop(boolean toLoop) {
+		this.soundLoop = toLoop;
 	}
     
 

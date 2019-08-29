@@ -14,6 +14,8 @@ import javax.sound.sampled.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -53,7 +55,11 @@ public class GameSetUp implements Runnable {
     private AudioInputStream audioStream;
     private AudioFormat format;
     private DataLine.Info info;
+    private String audioName;
     private Clip audioClip;
+    private Clip audioPlayer; //To play sound effects other than the main audio
+    private boolean soundEffectMute;
+    private boolean backgroundMusicMute;
 
     private BufferedImage loading;
 
@@ -106,6 +112,62 @@ public class GameSetUp implements Runnable {
         }
     }
 
+    public void stopAudio(){
+    	audioPlayer.stop();
+    }
+	public void stopMainAudio(){
+    	audioClip.stop();
+    }
+	public void playAudio(String fileLocation, boolean soundLoop){
+		try {
+			if(!soundEffectMute){
+				audioPlayer = AudioSystem.getClip();
+				audioPlayer.open(AudioSystem.getAudioInputStream(new File(fileLocation)));
+				if(!soundLoop){
+					audioPlayer.start();
+				}else{
+					audioPlayer.loop(Clip.LOOP_CONTINUOUSLY);
+				}
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+}
+	public void playMainAudioAs(String fileLocation){
+		try {
+			if(!backgroundMusicMute){
+			audioStream = AudioSystem.getAudioInputStream(new File(fileLocation));
+			audioClip = AudioSystem.getClip();
+			audioClip.open(audioStream);
+			audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+			audioName = fileLocation;
+			}
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void playMainAudio(){
+		audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
     public void reStart(){
         gameState = new GameState(handler);
     }
@@ -198,6 +260,17 @@ public class GameSetUp implements Runnable {
             e.printStackTrace();
         }
     }
+    
+    public void setSoundEffectMute(boolean soundEffectMute) {
+  		this.soundEffectMute = soundEffectMute;
+  	}
+      
+      public void setBackgroundMusicMute(boolean backgroundMusicMute) {
+  		this.backgroundMusicMute = backgroundMusicMute;
+  	}
+      public String getAudioName() {
+  		return audioName;
+  	}
 
     public KeyManager getKeyManager(){
         return keyManager;

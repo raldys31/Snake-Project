@@ -24,6 +24,7 @@ public class GameOverState extends State {
         uiManager.addObjects(new UIImageButton(125, handler.getGame().getHeight() - 150, 128, 64, Images.Yes, () -> {
             handler.getMouseManager().setUimanager(null);
             handler.getWorld().player.checkScore();
+            handler.getGame().stopAudio();
 			State.setState(handler.getGame().menuState);
 			DisplayScreen.setMessage("It's Snake Time!");
         }));
