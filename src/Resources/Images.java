@@ -33,24 +33,24 @@ public class Images {
 
         try {
 
-            title = ImageIO.read(getClass().getResourceAsStream("/Sheets/Title.png"));
-            Pause = ImageIO.read(getClass().getResourceAsStream("/Buttons/Pause.png"));
+            title = ImageIO.read(getClass().getResourceAsStream("/Sheets/Java Snake G Theme.jpg"));
+            Pause = ImageIO.read(getClass().getResourceAsStream("/Sheets/PauseState.png"));
             gameOver = ImageIO.read(getClass().getResourceAsStream("/Sheets/GameOverR.jpg"));
-            Resume[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/ResumeB.png"));
+            Resume[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/resumebv.png"));
             Resume[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/ResumeB2.png"));
-            BTitle[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/TitleB.png"));
+            BTitle[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/titlebv.png"));
             BTitle[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/TitleB2.png"));
-            Options[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/OptionsB.png"));
+            Options[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/optionsbv.png"));
             Options[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/OptionsB2.png"));
-            butstart[0]= ImageIO.read(getClass().getResourceAsStream("/Buttons/StartB.png"));//normbut
-            butstart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/StartB2.png"));//hoverbut
+            butstart[0]= ImageIO.read(getClass().getResourceAsStream("/Buttons/startbblack.png"));//normbut
+            butstart[1]= ImageIO.read(getClass().getResourceAsStream("/Buttons/startbwhite2.png"));//hoverbut
             butstart[2]= ImageIO.read(getClass().getResourceAsStream("/Buttons/StartB3.png"));//clickbut
             Yes[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/yesB.png"));
             Yes[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/yesB2.png"));
             No[0] = ImageIO.read(getClass().getResourceAsStream("/Buttons/noB.png"));
             No[1] = ImageIO.read(getClass().getResourceAsStream("/Buttons/noB2.png"));
 
-            icon =  new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Sheets/icon.png")));
+            icon =  new ImageIcon(ImageIO.read(getClass().getResourceAsStream("/Sheets/pixelsnake.png")));
 
 
         }catch (IOException e) {

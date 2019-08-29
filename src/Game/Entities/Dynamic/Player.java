@@ -372,6 +372,11 @@ public class Player {
 		}
 	}
     
+	public void closeGame() {
+		if (score < Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))) {
+			System.exit(0);
+		}
+	}
     
 
     public boolean isJustAte() {
