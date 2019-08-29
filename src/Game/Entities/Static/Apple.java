@@ -25,7 +25,7 @@ public class Apple {
 		return isGood;
 	}
 
-	public void setGood(boolean isGood) {
+	public void setIsGood(boolean isGood) {
 		this.isGood = isGood;
 	}
 
