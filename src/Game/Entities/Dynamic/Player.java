@@ -82,7 +82,10 @@ public class Player {
 			this.setJustAte(false);
 			EatAndAddTail(); 
 		}
-
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_ESCAPE)){
+			State.setState(handler.getGame().pauseState);
+		}
+		
     }
 
     public void checkCollisionAndMove(){
