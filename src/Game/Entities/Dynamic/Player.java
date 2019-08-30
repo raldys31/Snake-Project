@@ -172,7 +172,7 @@ public class Player {
     
     //If the snake has made 60 or more steps then the apple becomes rotten.
     public void checkSteps() {
-    	if (steps >= 60) {
+    	if (steps >= 80) {
     		handler.getWorld().apple.setIsGood(false);
     	}
     }

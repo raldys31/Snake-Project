@@ -29,7 +29,7 @@ public class GameOverState extends State {
 			DisplayScreen.setMessage("It's Snake Time!");
         }));
 
-        uiManager.addObjects(new UIImageButton(580, handler.getGame().getHeight() - 150, 128, 64, Images.No, () -> {
+        uiManager.addObjects(new UIImageButton(560, handler.getGame().getHeight() - 150, 128, 64, Images.No, () -> {
             handler.getMouseManager().setUimanager(null);
             handler.getWorld().player.checkScore();
             handler.getWorld().player.closeGame();
@@ -44,7 +44,7 @@ public class GameOverState extends State {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Images.gameOver,0,0,800,800,null);
+        g.drawImage(Images.gameOver,0,0,780,780,null);
         uiManager.Render(g);
     }
 }
