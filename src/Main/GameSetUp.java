@@ -1,9 +1,11 @@
 package Main;
 
 import Display.DisplayScreen;
+import Game.GameStates.GameInfoState;
 import Game.GameStates.GameOverState;
 import Game.GameStates.GameState;
 import Game.GameStates.MenuState;
+import Game.GameStates.OptionsState;
 import Game.GameStates.PauseState;
 import Game.GameStates.State;
 import Input.KeyManager;
@@ -49,6 +51,8 @@ public class GameSetUp implements Runnable {
     public State menuState;
     public State pauseState;
     public State gameOverState;
+    public State optionsState;
+    public State gameInfoState;
 
     //Res.music
     private InputStream audioFile;
@@ -90,12 +94,14 @@ public class GameSetUp implements Runnable {
         menuState = new MenuState(handler);
         pauseState = new PauseState(handler);
         gameOverState = new GameOverState(handler);
+        optionsState = new  OptionsState(handler);
+        gameInfoState = new GameInfoState(handler);
 
         State.setState(menuState);
 
         try {
 
-            audioFile = getClass().getResourceAsStream("/music/nature.wav");
+            audioFile = getClass().getResourceAsStream("/music/Megalovania.wav");
             audioStream = AudioSystem.getAudioInputStream(audioFile);
             format = audioStream.getFormat();
             info = new DataLine.Info(Clip.class, format);
