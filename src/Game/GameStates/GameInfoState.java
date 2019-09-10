@@ -19,7 +19,7 @@ public class GameInfoState extends State {
         uiManager = new UIManager(handler);
         handler.getMouseManager().setUimanager(uiManager);
 
-        uiManager.addObjects(new UIImageButton(160, handler.getHeight()/20 + 585, 192, 64, Images.Back, ()-> {
+        uiManager.addObjects(new UIImageButton(160, handler.getHeight()/20 + 595, 138, 54, Images.Back, ()-> {
             handler.getMouseManager().setUimanager(null); 
             State.setState(handler.getGame().menuState);
         }));

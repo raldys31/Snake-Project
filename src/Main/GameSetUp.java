@@ -64,6 +64,7 @@ public class GameSetUp implements Runnable {
     private Clip audioPlayer; //To play sound effects other than the main audio
     private boolean soundEffectMute;
     private boolean backgroundMusicMute;
+    private long clipTime = 0;
 
     private BufferedImage loading;
 
@@ -173,8 +174,14 @@ public class GameSetUp implements Runnable {
 		}
 	}
 	
-	public void resetMainAudio() {
-		audioClip.setMicrosecondPosition(0);
+	public void resumeBackgroundMusic(){
+		audioClip.setMicrosecondPosition(clipTime);
+		audioClip.start();
+	}
+
+	public void restartBackgroundMusic() {
+		clipTime = 0;
+		resumeBackgroundMusic();
 	}
 	
 	public void playMainAudio(){
