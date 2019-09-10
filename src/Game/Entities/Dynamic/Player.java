@@ -38,12 +38,15 @@ public class Player {
 	private String highscore;
 	private String eatSoundEffect;
 	private String deathSoundEffect;
+	private String bananaSoundEffect;
 	private Color playerColor;
 	private Color appleColor;
 	private Color rottenAppleColor;
+	private Color bananaColor;
 	private Tail tail;
 
 	public boolean justAte;
+	public boolean justAteBanana;
 	private boolean soundLoop;
 	private boolean tailRemoved;
 
@@ -58,13 +61,16 @@ public class Player {
 		moveCounter = 0;
 		direction= "Right";
 		justAte = false;
+		justAteBanana = false;
 		lenght= 1;
 		playerColor = Color.green;
 		appleColor = Color.red;
 		rottenAppleColor = Color.black;
+		bananaColor = Color.yellow;
 		speedAdjust = 20;
 		eatSoundEffect = "res/music/bite.wav";
 		deathSoundEffect = "res/music/sound-frogger-dead.wav";
+		bananaSoundEffect = "res/music/Powerup.wav";
 		soundLoop = true;
 		tailRemoved = false;
 
@@ -160,6 +166,11 @@ public class Player {
 			adjustScore();
 			this.setSteps(0);
 		}
+		
+		if(handler.getWorld().bananaLocation[xCoord][yCoord]) {
+			this.setJustAteBanana(true);
+			slowSnake();
+		}
 
 		//Displays the score on the bottom as soon as the game starts and gets updated whenever the snake eats a dot.
 		if((xCoord > 0 || yCoord > 0) || justAte==true){
@@ -227,6 +238,21 @@ public class Player {
 							handler.getWorld().GridPixelsize,
 							handler.getWorld().GridPixelsize);
 
+				}
+			}
+		}
+		
+		//Sets the color of the banana.
+		for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
+			for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
+				g.setColor(bananaColor);
+				
+				//Made the banana appears only when the speed in the game becomes difficult.
+				if(handler.getWorld().bananaLocation[i][j] && speedAdjust <= 8){
+					g.fillOval((i*handler.getWorld().GridPixelsize),
+							(j*handler.getWorld().GridPixelsize),
+							handler.getWorld().GridPixelsize,
+							handler.getWorld().GridPixelsize);
 				}
 			}
 		}
@@ -387,6 +413,16 @@ public class Player {
 			handler.getWorld().body.addLast(new Tail(xCoord, yCoord, handler));
 		}
 	}
+	
+	//Power-Up: Eating a banana decreases the speed and increases the score by half the original formula.
+	//Appears only when the speed in the game becomes difficult.
+	public void slowSnake() {
+		speedAdjust +=2;
+		score += Math.sqrt(2*score + 1)/2;
+		handler.getGame().playAudio(bananaSoundEffect, false);
+		handler.getWorld().bananaLocation[xCoord][yCoord] = false;
+		handler.getWorld().bananaOnBoard = false;
+	}
 
 	//Scoring system.
 	public void adjustScore() {
@@ -496,5 +532,13 @@ public class Player {
 
 	public void setSteps(int steps) {
 		this.steps = steps;
+	}
+
+	public boolean isJustAteBanana() {
+		return justAteBanana;
+	}
+
+	public void setJustAteBanana(boolean justAteBanana) {
+		this.justAteBanana = justAteBanana;
 	}
 }

@@ -1,6 +1,7 @@
 package Worlds;
 
 import Game.Entities.Static.Apple;
+import Game.Entities.Static.Banana;
 import Main.Handler;
 
 import java.awt.*;
@@ -19,6 +20,7 @@ public class WorldOne extends WorldBase{
         GridPixelsize = (780/GridWidthHeightPixelCount);
         playerLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
         appleLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
+        bananaLocation = new Boolean[GridWidthHeightPixelCount][GridWidthHeightPixelCount];
 
     }
 
@@ -41,6 +43,24 @@ public class WorldOne extends WorldBase{
 
             apple = new Apple(handler,appleX,appley);
             appleLocation[appleX][appley]=true;
+
+        }
+        
+        if(!bananaOnBoard){
+            bananaOnBoard=true;
+            int bananaX = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1);
+            int bananaY = new Random().nextInt(handler.getWorld().GridWidthHeightPixelCount-1);
+
+            //change coordinates till one is selected in which the player isnt standing
+            boolean goodCoordinates=false;
+            do{
+                if(!handler.getWorld().playerLocation[bananaX][bananaY]){
+                    goodCoordinates=true;
+                }
+            }while(!goodCoordinates);
+
+            banana = new Banana(handler,bananaX,bananaY);
+            bananaLocation[bananaX][bananaY]=true;
 
         }
     }

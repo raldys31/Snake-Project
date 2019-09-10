@@ -3,6 +3,7 @@ package Worlds;
 import Game.Entities.Dynamic.Player;
 import Game.Entities.Dynamic.Tail;
 import Game.Entities.Static.Apple;
+import Game.Entities.Static.Banana;
 import Main.Handler;
 
 import java.awt.*;
@@ -31,6 +32,9 @@ public abstract class WorldBase {
 	public Boolean appleOnBoard;
 	public Apple apple;
 	public Boolean[][] appleLocation;
+	public Boolean bananaOnBoard;
+	public Banana banana;
+	public Boolean[][] bananaLocation;
 	private Color gridlinesColor;
 
 
@@ -43,6 +47,7 @@ public abstract class WorldBase {
 		this.handler = handler;
 
 		appleOnBoard = false;
+		bananaOnBoard = false;
 		gridlinesColor = new Color(178,0,255);
 
 

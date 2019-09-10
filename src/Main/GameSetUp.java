@@ -108,6 +108,8 @@ public class GameSetUp implements Runnable {
             audioClip = (Clip) AudioSystem.getLine(info);
             audioClip.open(audioStream);
             audioClip.loop(Clip.LOOP_CONTINUOUSLY);
+            
+            audioName = "/music/Megalovania.wav";
 
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
@@ -170,6 +172,11 @@ public class GameSetUp implements Runnable {
 			e.printStackTrace();
 		}
 	}
+	
+	public void resetMainAudio() {
+		audioClip.setMicrosecondPosition(0);
+	}
+	
 	public void playMainAudio(){
 		audioClip.loop(Clip.LOOP_CONTINUOUSLY);
 	}
