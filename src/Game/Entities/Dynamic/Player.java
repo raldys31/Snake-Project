@@ -27,7 +27,7 @@ public class Player {
 	public int lenght;
 	public int xCoord;
 	public int yCoord;
-	public int score;
+	public double score;
 	public int steps;
 	private int removeTailX;
 	private int removeTailY;
@@ -83,16 +83,16 @@ public class Player {
 			checkSteps();
 			moveCounter=0;
 		}
-		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_W)){
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_W) && direction != "Down"){
 			direction="Up";
 		}
-		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_S)){
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_DOWN) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_S) && direction != "Up"){
 			direction="Down";
 		}
-		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_A)){
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_LEFT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_A) && direction != "Right"){
 			direction="Left";
 		}
-		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_D)){
+		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_RIGHT) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_D) && direction != "Left"){
 			direction="Right";
 		}
 		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_EQUALS)){
@@ -174,7 +174,7 @@ public class Player {
 
 		//Displays the score on the bottom as soon as the game starts and gets updated whenever the snake eats a dot.
 		if((xCoord > 0 || yCoord > 0) || justAte==true){
-			DisplayScreen.setMessage(String.format("Current Score: %d; %s", score, highscore)); 
+			DisplayScreen.setMessage(String.format("Current Score: %.2f; %s", score, highscore)); 
 		}
 
 		if(!handler.getWorld().body.isEmpty()) {
