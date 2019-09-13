@@ -27,7 +27,7 @@ public class Player {
 	public int lenght;
 	public int xCoord;
 	public int yCoord;
-	public double score;
+	public int score;
 	public int steps;
 	private int removeTailX;
 	private int removeTailY;
@@ -49,6 +49,7 @@ public class Player {
 	public boolean justAteBanana;
 	private boolean soundLoop;
 	private boolean tailRemoved;
+	private boolean beatHighscore;
 
 
 	public Player(Handler handler){
@@ -73,6 +74,7 @@ public class Player {
 		bananaSoundEffect = "res/music/Powerup.wav";
 		soundLoop = true;
 		tailRemoved = false;
+		beatHighscore = false;
 
 	}
 
@@ -81,6 +83,7 @@ public class Player {
 		if(moveCounter>=speedAdjust) {
 			checkCollisionAndMove();
 			checkSteps();
+			verifyScore();
 			moveCounter=0;
 		}
 		if(handler.getKeyManager().keyJustPressed(KeyEvent.VK_UP) || handler.getKeyManager().keyJustPressed(KeyEvent.VK_W) && direction != "Down"){
@@ -174,7 +177,11 @@ public class Player {
 
 		//Displays the score on the bottom as soon as the game starts and gets updated whenever the snake eats a dot.
 		if((xCoord > 0 || yCoord > 0) || justAte==true){
-			DisplayScreen.setMessage(String.format("Current Score: %.2f; %s", score, highscore)); 
+			if (score < 0) {
+				score = 0;
+				kill();
+			}
+			DisplayScreen.setMessage(String.format("Current Score: %d; %s", score, highscore)); 
 		}
 
 		if(!handler.getWorld().body.isEmpty()) {
@@ -259,19 +266,23 @@ public class Player {
 	}
 
 	public void removeTail() {
-		if(justAte == true && handler.getWorld().apple.isGood == false && lenght != 0) {
+		if(justAte == true && handler.getWorld().apple.isGood == false && !handler.getWorld().body.isEmpty()) {
 			removeTailX = handler.getWorld().body.getLast().x;
 			removeTailY = handler.getWorld().body.getLast().y;
 			handler.getWorld().playerLocation[removeTailX][removeTailY] = false;
 			handler.getWorld().body.removeLast();
 			tailRemoved = true;
+			lenght--;
+		}
+		else if (justAte == true && handler.getWorld().apple.isGood == false && handler.getWorld().body.isEmpty()) {
+			kill();
 		}
 	}
 
 	public void eatAndAddTail(){
 		lenght++;
 		//Kills the snake if it eats a rotten apple and has no tail.
-		if(justAte == true && handler.getWorld().apple.isGood == false && score == 0){
+		if(justAte == true && handler.getWorld().apple.isGood == false && lenght == 0){
 			kill(); 
 		}
 		else if (justAte == true && handler.getWorld().apple.isGood) {
@@ -439,6 +450,15 @@ public class Player {
 			}
 		}
 	}
+	
+	//Game Over if the score gets negative.
+	public void verifyScore() {
+		if (score < 0) {
+			handler.getGame().stopMainAudio();
+			handler.getGame().playAudio(deathSoundEffect, false);
+			State.setState(handler.getGame().gameOverState); 
+		}
+	}
 
 	public void kill(){
 		lenght = 0;
@@ -475,6 +495,7 @@ public class Player {
 
 	public void checkScore(){
 		if(score > Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))){
+			this.setBeatHighscore(true);
 			handler.getGame().stopAudio();
 			handler.getGame().playAudio("res/music/cheering.wav", false);
 			String name = (String) JOptionPane.showInputDialog(null, "You set a new high score.\nPlease enter your name: ", "Congratulations!", JOptionPane.INFORMATION_MESSAGE, Images.icon, null, "");
@@ -505,7 +526,7 @@ public class Player {
 	}
 
 	public void closeGame() {
-		if (score < Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))) {
+		if (score < Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1)) || this.beatHighscore == false) {
 			System.exit(0);
 		}
 	}
@@ -534,11 +555,11 @@ public class Player {
 		this.steps = steps;
 	}
 
-	public boolean isJustAteBanana() {
-		return justAteBanana;
-	}
-
 	public void setJustAteBanana(boolean justAteBanana) {
 		this.justAteBanana = justAteBanana;
+	}
+
+	public void setBeatHighscore(boolean beatHighscore) {
+		this.beatHighscore = beatHighscore;
 	}
 }
