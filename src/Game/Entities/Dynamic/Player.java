@@ -23,7 +23,7 @@ import Game.GameStates.State;
 public class Player {
 
 	private Handler handler;
-	
+
 	public int lenght;
 	public int xCoord;
 	public int yCoord;
@@ -169,7 +169,7 @@ public class Player {
 			adjustScore();
 			this.setSteps(0);
 		}
-		
+
 		if(handler.getWorld().bananaLocation[xCoord][yCoord]) {
 			this.setJustAteBanana(true);
 			slowSnake();
@@ -248,12 +248,12 @@ public class Player {
 				}
 			}
 		}
-		
+
 		//Sets the color of the banana.
 		for (int i = 0; i < handler.getWorld().GridWidthHeightPixelCount; i++) {
 			for (int j = 0; j < handler.getWorld().GridWidthHeightPixelCount; j++) {
 				g.setColor(bananaColor);
-				
+
 				//Made the banana appears only when the speed in the game becomes difficult.
 				if(handler.getWorld().bananaLocation[i][j] && speedAdjust <= 8){
 					g.fillOval((i*handler.getWorld().GridPixelsize),
@@ -424,7 +424,7 @@ public class Player {
 			handler.getWorld().body.addLast(new Tail(xCoord, yCoord, handler));
 		}
 	}
-	
+
 	//Power-Up: Eating a banana decreases the speed and increases the score by half the original formula.
 	//Appears only when the speed in the game becomes difficult.
 	public void slowSnake() {
@@ -450,7 +450,7 @@ public class Player {
 			}
 		}
 	}
-	
+
 	//Game Over if the score gets negative.
 	public void verifyScore() {
 		if (score < 0) {
@@ -494,7 +494,7 @@ public class Player {
 	}
 
 	public void checkScore(){
-		if(score > Integer.parseInt(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))){
+		if(score > Double.parseDouble(highscore.substring(highscore.indexOf(":") + 2, highscore.indexOf("(")-1))){
 			this.setBeatHighscore(true);
 			handler.getGame().stopAudio();
 			handler.getGame().playAudio("res/music/cheering.wav", false);
@@ -502,7 +502,9 @@ public class Player {
 			if(name == null){
 				name = "somebody";
 			}
-			highscore = String.format("High Score: %d (by %s)", score, name); 
+			try {highscore = "High Score: " + score + " (by " + name + ")";
+			} catch (Exception e) {
+			}
 
 			File scoreFile = new File("highscore.dat");
 			BufferedWriter writer;
